@@ -1,6 +1,6 @@
 bs4
-langchain==0.0.315
-openai==0.28.1
+langchain==0.1.0
+openai
 PyPDF2
 python-dotenv
 spacy
@@ -8,3 +8,4 @@ streamlit
 tiktoken
 linkedin_api
 inflect
+faiss-cpu==1.7.4

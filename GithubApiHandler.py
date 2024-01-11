@@ -1,11 +1,12 @@
 import github
 from urllib.parse import urlparse
 import inflect
-
-def GetGithubRepoDetails(github_url):
+import os
+async def GetGithubRepoDetails(github_url):
     # Use a GitHub API token securely
-    github_token = "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"
-    g = github.Github(github_token)
+    github_token = os.getenv('GITHUB_TOKEN')
+    # g = github.Github(github_token)
+    g = await github.GHClient()
 
     username = ''
     gitResult = ''
@@ -13,7 +14,8 @@ def GetGithubRepoDetails(github_url):
     if github_url:
         parsed_url = urlparse(github_url)
         path_parts = parsed_url.path.split("/")
-        username = path_parts[1]
+        print(path_parts)
+        username = path_parts[0]
 
     try:
         user = g.get_user(username)

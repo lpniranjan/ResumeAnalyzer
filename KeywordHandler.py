@@ -9,7 +9,7 @@ def GetKeywords(inputText):
 
     # Use OpenAI GPT-3 to generate keywords
     response = openai.Completion.create(
-        engine="text-davinci-003",  # You can experiment with different engines
+        engine="gpt-3.5-turbo-instruct",
         prompt=full_prompt,
         max_tokens=100,  # Adjust max_tokens as needed
         n=1,  # Number of completions to generate

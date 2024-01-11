@@ -6,6 +6,7 @@ import LinkedinApiHandler as LinkedInData
 import GithubApiHandler as GitHubData
 import JsonContentHandler as JsonAnalysis
 import KeywordHandler as keywordAnalysis
+import asyncio
 
 load_dotenv()
 st.set_page_config(page_title="Resume Screening", page_icon=":document:")
@@ -75,7 +76,7 @@ if st.sidebar.button("Forecast"):
                     
                     if gitURL and gitURL != '':
                          st.write(CV_template.replace("{{MSG}}", "GitHub forecast:"),unsafe_allow_html=True)
-                         st.write(ANA_template.replace("{{MSG}}", (GitHubData.GetGithubRepoDetails(gitURL)).strip()),unsafe_allow_html=True)
+                         st.write(ANA_template.replace("{{MSG}}", (asyncio.run(GitHubData.GetGithubRepoDetails(gitURL))).strip()),unsafe_allow_html=True)
                     
                   
                     #kew2 = keywordAnalysis.GetKeywords((y[0]["analysis"]).strip())
