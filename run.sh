@@ -1,0 +1,1 @@
+docker run -it -p 8501:8501 -e OPENAI_API_KEY='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' resumer-analyzer 
