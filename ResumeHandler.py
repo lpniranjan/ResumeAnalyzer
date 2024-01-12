@@ -9,7 +9,6 @@ from langchain.chains import LLMChain
 import spacy
 from collections import Counter
 
-
 # Analyze resumes
 #Single resume analysis
 
@@ -29,7 +28,12 @@ def GetSingleResumeResult(pdfDoc, userQuestion,jobTitle):
      if "The linkedin URL of this resume is" in linkedinURL: 
       linkedinURL = linkedinURL.replace("The linkedin URL of this resume is", "") 
 
-     linkedinURL = linkedinURL.replace(".", "")
+     if len(linkedinURL) > 0 and linkedinURL[len(linkedinURL) - 1] == ".":
+        linkedinURL = linkedinURL[:-1] + ""
+
+     if len(linkedinURL) > 0 and linkedinURL[len(linkedinURL) - 1] == "/":
+        linkedinURL = linkedinURL[:-1] + ""   
+
      linkedinURL = linkedinURL.replace("contactprofile", "")    
      if "This resume does not have a LinkedIn URL." in linkedinURL or "There is no LinkedIn URL in this resume." in linkedinURL or "The LinkedIn URL is not provided in this resume." in linkedinURL: 
       linkedinURL = ""
@@ -42,7 +46,10 @@ def GetSingleResumeResult(pdfDoc, userQuestion,jobTitle):
      if "The github URL for this resume is" in githubURL: 
       githubURL = githubURL.replace("The github URL for this resume is", "")  
 
-     githubURL = githubURL.replace(".", "") 
+     #githubURL = githubURL.replace(".", "") 
+     if len(githubURL) > 0 and githubURL[len(githubURL) - 1] == ".":
+        githubURL = githubURL[:-1] + ""
+     
      if "This resume does not have a GitHub URL." in githubURL or "There is no GitHub URL in this resume." in githubURL or "The GitHub URL is not provided in this resume." in githubURL: 
       githubURL = ""
  
@@ -80,7 +87,9 @@ def GetResumeAnalysis(userQuestion, texts):
      embeddings = OpenAIEmbeddings()
      document_search = FAISS.from_texts(texts,embeddings)
      
-     chain = load_qa_chain(OpenAI(), chain_type="stuff")
+     model_name = "gpt-3.5-turbo-instruct"
+
+     chain = load_qa_chain(OpenAI(model=model_name), chain_type="stuff")
      query = "{jdTitle}".format(jdTitle = userQuestion)
      docs = document_search.similarity_search(query)
      cvAnalysis = chain.run(input_documents=docs,question=query)
@@ -158,21 +167,14 @@ def GetLinkedInResult(userQuestion,textJson):
      return pdfAnalysis
 
 def GetResumeAnalysisScore(jobPost,resumeText):
-    spacy.cli.download("en_core_web_md")
-
-    nlp = spacy.load("en_core_web_md")
-    # Process the text using spaCy
-    #jobPostDoc = nlp(jobPost)
-    #print("jd");
-    #print(jobPostDoc);
-    #resumeDoc = nlp(resumeText)
-    #print("res");
-    #print(resumeDoc);
-
-    # Calculate similarity between job post and resume
-    #similarity_score = round(((resumeDoc.similarity(jobPostDoc)) * 100),2)
-    #similarity_score =28.35
-
+    
+    nlp = ""; 
+    try:
+       nlp = spacy.load("en_core_web_md")
+    except Exception as e:
+        spacy.cli.download("en_core_web_md")
+        nlp = spacy.load("en_core_web_md")
+ 
         # Process CV text
     cv_doc = nlp(resumeText)
 
