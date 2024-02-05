@@ -34,3 +34,6 @@ async def GetGithubRepoDetails(github_url):
 
     return git_result
 
+def NumberToWords(number):
+    p = inflect.engine()
+    return p.number_to_words(number)
