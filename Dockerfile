@@ -6,8 +6,8 @@ COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 
-RUN pip install aiohttp==3.9.0b0
-RUN pip install github==1.2.7 --no-dependencie
+# RUN pip install aiohttp==3.9.0b0
+# RUN pip install github==1.2.7 --no-dependencie
 
 COPY . .
 
